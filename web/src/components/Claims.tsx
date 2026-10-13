@@ -46,7 +46,7 @@ export function Claims({ ids }: { ids: bigint[] }) {
 
   return (
     <Panel title="Your winnings and refunds" id="claims">
-      {!address && <p className="hint">Connect a wallet to see unclaimed winnings, refunds and credit.</p>}
+      {!address && <p className="hint">Connect a wallet to see your winnings and refunds.</p>}
       {address && rows.length === 0 && <p className="hint">Nothing to claim across the last {ids.length} rounds.</p>}
       {rows.length > 0 && <ul className="claims">{rows.map((x) => <ClaimRow key={String(x.round.id)} round={x.round} amount={x.amount} />)}</ul>}
       {address && owed !== null && (

@@ -12,9 +12,14 @@ export function Header() {
   const wrongChain = isConnected && chainId !== cfg.chain.id;
   const { data: bal } = useBalance({ address, chainId: cfg.chain.id, query: { enabled: !!address, refetchInterval: 8000 } });
 
+  // Injected wallets: prefer the EIP-6963 named entries over the generic window.ethereum fallback,
+  // and drop that fallback when no provider is injected so the install hint shows instead of a failed connect.
   const injected = connectors.filter((c) => c.type === 'injected' || c.id === 'injected');
   const named = injected.filter((c) => c.id !== 'injected');
-  const list = named.length > 0 ? named : injected;
+  const hasWindowProvider = typeof window !== 'undefined' && !!(window as { ethereum?: unknown }).ethereum;
+  // WalletConnect is registered only when the build carries a project id (web/README.md).
+  const walletConnect = connectors.filter((c) => c.type === 'walletConnect');
+  const list = [...(named.length > 0 ? named : hasWindowProvider ? injected : []), ...walletConnect];
 
   return (
     <header className="topbar">
@@ -25,7 +30,7 @@ export function Header() {
       <div className="wallet">
         {!isConnected ? (
           <div className="menu-wrap">
-            <button type="button" className="btn btn-primary" onClick={() => (list.length === 1 ? connect({ connector: list[0] }) : setOpen((o) => !o))} disabled={isPending} aria-expanded={list.length > 1 ? open : undefined}>
+            <button type="button" className="btn btn-primary" onClick={() => (list.length === 1 ? connect({ connector: list[0] }) : setOpen((o) => !o))} disabled={isPending} aria-expanded={list.length !== 1 ? open : undefined}>
               {isPending ? 'Connecting…' : 'Connect wallet'}
             </button>
             {open && list.length > 1 && (
@@ -39,7 +44,14 @@ export function Header() {
                 ))}
               </ul>
             )}
-            {list.length === 0 && <p className="hint">No browser wallet found. Install MetaMask or Rabby to play; reads work without one.</p>}
+            {open && list.length === 0 && (
+              <div className="menu" role="status">
+                <p className="hint">
+                  No browser wallet found. Install MetaMask or Rabby to play; reads work without one.
+                  {!cfg.walletConnectProjectId && ' This build has no WalletConnect project id, so there is no QR option.'}
+                </p>
+              </div>
+            )}
             {error && <p className="tx tx-error" role="alert">{error.message.split('\n')[0]}</p>}
           </div>
         ) : (

@@ -202,6 +202,13 @@ main { max-width: 1100px; margin: 0 auto; padding: var(--space-4); display: grid
 .admin-item .field { width: 100%; }
 .about-list { display: grid; gap: var(--space-2); padding-left: 1.2em; list-style: disc; }
 .addr { display: inline-flex; align-items: center; gap: var(--space-1); flex-wrap: wrap; }
+/* Contract addresses: one labelled row each; the address wraps inside its link, Copy stays beside it. */
+.about-addrs { display: grid; gap: var(--space-2); }
+.about-addrs dt { color: var(--text-dim); }
+.about-addrs dd { margin: 0; min-width: 0; }
+.about-addrs .addr { display: flex; flex-wrap: nowrap; align-items: baseline; }
+.about-addrs .addr .mono { min-width: 0; flex: 1 1 auto; overflow-wrap: anywhere; }
+.about-addrs .addr .icon-btn { flex: 0 0 auto; }
 .footer { padding: var(--space-5) var(--space-4) var(--space-6); text-align: center; color: var(--text-dim); font-size: var(--fs-1); }
 .boot-error { padding: var(--space-5); display: grid; gap: var(--space-3); max-width: 60ch; }
 

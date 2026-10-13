@@ -58,7 +58,10 @@ export default function App() {
             <li>Settlement replays the deterministic engine on chain from the random word. Winners split the pot pro rata minus the round's rake, claimable here.</li>
             <li>Rounds that stall can be cancelled by anyone after the timeout, refunding every stake. The owner can never move player ETH.</li>
           </ul>
-          <p className="hint">Game <AddressLink address={cfg.game.address} full /> on {cfg.chain.name}. Token {cfg.token.symbol} <AddressLink address={cfg.token.address} full />.</p>
+          <dl className="about-addrs hint">
+            <div><dt>Game on {cfg.chain.name}</dt><dd><AddressLink address={cfg.game.address} full /></dd></div>
+            <div><dt>Token {cfg.token.symbol}</dt><dd><AddressLink address={cfg.token.address} full /></dd></div>
+          </dl>
         </section>
       </main>
       <footer className="footer">

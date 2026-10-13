@@ -92,7 +92,7 @@ export function Arena({ round, settings, roundError, onReplay }: { round: Round 
       <section className="arena arena-empty" id="arena">
         <h1 className="headline">Back a cat. Win the pot.</h1>
         <p className="lede">Bet ETH on Red or Blue. The fight is decided on chain by Chainlink VRF; winners split the pot.</p>
-        <p className="hint">No fight has been opened yet. The game owner or keeper opens the first round; this page updates by itself.</p>
+        <p className="hint">No fight is open yet. This page updates when the keeper opens one.</p>
         <ul className="roster">
           {CATS.map((c, i) => (
             <li key={c.name}><Portrait name={c.name} uid={`roster${i}`} /><span>{displayName(c.name)}</span></li>

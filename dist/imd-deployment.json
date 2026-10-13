@@ -28,16 +28,16 @@
       "sha256": "47e57a3fcbad55990d5fb2b23a5b67e1dc571d9a4e5ba90035ad77d71b0227f9"
     },
     {
-      "path": "assets/index-CG5Xt97j.css",
-      "sha256": "9afe5d5c6d26ced122772946bbe2707c07ce9108c0face0f0b89115f441b8288"
+      "path": "assets/index-CN6Bu97Z.js",
+      "sha256": "aa353af93801af1aa77a711e135e5f64801cdef9db0748805ac8a79d2e90eee9"
     },
     {
-      "path": "assets/index-D78StMz2.js",
-      "sha256": "877a30619d87f61f8973f679c999c027b7cfaf023d3585c0bff2495675023b57"
+      "path": "assets/index-lApImSeI.css",
+      "sha256": "6343bea7d427931119657911b8823aab5be470f68bd2b6507da9f6f271590c9a"
     },
     {
-      "path": "assets/vendor-DcXytJmP.js",
-      "sha256": "1271f40b0c87066fa28e98d03610d8503276567954491c7776cdd77fae004980"
+      "path": "assets/vendor-CJ5nFgc9.js",
+      "sha256": "0f36c268640db640c28902815f5e862c23336f7ca9108f482674640e9082c5b5"
     },
     {
       "path": "favicon.svg",
@@ -45,7 +45,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "8c0407438dc21acbc07537857a01768cfc031f9d571f1df3c29b24ed12278b38"
+      "sha256": "e9a55e27b6ca4ed46621172e2c3f653d40a60b93edd42471a04324c20419fcc6"
     },
     {
       "path": "og.png",

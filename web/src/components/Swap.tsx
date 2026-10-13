@@ -114,10 +114,10 @@ export function Swap() {
         </label>
       </div>
       <dl className="swap-info">
-        <div><dt>Balance</dt><dd className="num">{balance === undefined ? '—' : dir === 'buy' ? fmtEth(balance, 5) : `${fmtUnits(balance, cfg.token.decimals, 2)} ${cfg.token.symbol}`}</dd></div>
+        <div><dt>Balance</dt><dd className="num">{balance === undefined ? null : dir === 'buy' ? fmtEth(balance, 5) : `${fmtUnits(balance, cfg.token.decimals, 2)} ${cfg.token.symbol}`}</dd></div>
         <div><dt>Pool price</dt><dd className="num">{meowPerEth === null ? (slot0.isLoading ? '…' : 'pool not initialized') : `${meowPerEth.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${cfg.token.symbol} per ETH`}</dd></div>
-        <div><dt>You receive</dt><dd className="num">{quote ? (dir === 'buy' ? `${fmtUnits(quote.out, cfg.token.decimals, 2)} ${cfg.token.symbol}` : fmtEth(quote.out, 6)) : '—'}</dd></div>
-        <div><dt>Minimum after slippage</dt><dd className="num">{minOut !== null ? (dir === 'buy' ? `${fmtUnits(minOut, cfg.token.decimals, 2)} ${cfg.token.symbol}` : fmtEth(minOut, 6)) : '—'}</dd></div>
+        <div><dt>You receive</dt><dd className="num">{quote ? (dir === 'buy' ? `${fmtUnits(quote.out, cfg.token.decimals, 2)} ${cfg.token.symbol}` : fmtEth(quote.out, 6)) : null}</dd></div>
+        <div><dt>Minimum after slippage</dt><dd className="num">{minOut !== null ? (dir === 'buy' ? `${fmtUnits(minOut, cfg.token.decimals, 2)} ${cfg.token.symbol}` : fmtEth(minOut, 6)) : null}</dd></div>
       </dl>
       {quoteErr && <p className="tx tx-error" role="alert">Quote failed: {quoteErr}</p>}
       {insufficient && <p className="tx tx-error" role="alert">Your balance is lower than this amount.</p>}

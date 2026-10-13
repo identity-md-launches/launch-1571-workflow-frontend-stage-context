@@ -37,8 +37,8 @@ export function History({ ids, onReplay }: { ids: bigint[]; onReplay: (r: Round)
                     ) : STATUS_LABEL[r.status]}
                   </td>
                   <td className="num">{fmtEth(pool(r), 5)}</td>
-                  <td className="mono seed-cell">{r.status === Status.Settled ? seedHexFromRandomWord(r.randomWord) : '—'}</td>
-                  <td>{link ? <a href={link} target="_blank" rel="noreferrer">{hash ? 'Transaction' : 'Contract'}</a> : '—'}</td>
+                  <td className="mono seed-cell">{r.status === Status.Settled ? seedHexFromRandomWord(r.randomWord) : null}</td>
+                  <td>{link ? <a href={link} target="_blank" rel="noreferrer">{hash ? 'Transaction' : 'Contract'}</a> : null}</td>
                 </tr>
               );
             })}

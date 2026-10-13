@@ -7,9 +7,17 @@
  * interface ABIs of the chain-wide Uniswap v4 / Permit2 / ERC-20 contracts whose addresses also
  * come from that manifest's `network` block.
  */
-import { createConfig, fallback, http, type Config } from 'wagmi';
-import { injected } from 'wagmi/connectors';
+import { createConfig, fallback, http, type Config, type CreateConnectorFn } from 'wagmi';
+import { injected, walletConnect } from 'wagmi/connectors';
 import { defineChain, type Abi, type Address, type Chain, type Hex } from 'viem';
+
+/**
+ * Public WalletConnect Cloud project id, inlined at build time from VITE_WALLETCONNECT_PROJECT_ID
+ * (see vite.config.ts and web/README.md). Empty when the build was given none: the WalletConnect
+ * connector and its chunk are then left out of the export and only injected wallets can connect.
+ */
+declare const __WALLETCONNECT_PROJECT_ID__: string;
+export const WALLETCONNECT_PROJECT_ID: string | null = __WALLETCONNECT_PROJECT_ID__ || null;
 
 export interface PoolKey {
   currency0: Address;
@@ -78,7 +86,7 @@ export interface AppConfig {
   walletAddChain: WalletAddChain | null;
   poolKey: PoolKey | null;
   explorer: string;
-  /** Optional public WalletConnect project id (build-time, see README). */
+  /** Optional public WalletConnect project id (build-time, see web/README.md); null means injected wallets only. */
   walletConnectProjectId: string | null;
 }
 
@@ -131,7 +139,7 @@ export async function loadConfig(): Promise<AppConfig> {
     rpcUrls: { default: { http: rpcUrls } },
     blockExplorers: explorer ? { default: { name: 'Explorer', url: explorer } } : undefined,
   });
-  const walletConnectProjectId = (import.meta.env.VITE_WALLETCONNECT_PROJECT_ID as string | undefined)?.trim() || null;
+  const walletConnectProjectId = WALLETCONNECT_PROJECT_ID;
   return {
     manifest,
     chain,
@@ -145,12 +153,25 @@ export async function loadConfig(): Promise<AppConfig> {
   };
 }
 
-/** wagmi config: injected (EIP-6963 / window.ethereum) wallets, reads through the public RPC list. */
+/**
+ * wagmi config: injected (EIP-6963 / window.ethereum) wallets, plus WalletConnect when the build
+ * carries a project id; reads go through the public RPC list.
+ */
 export function buildWagmiConfig(cfg: AppConfig): Config {
   const transports = cfg.chain.rpcUrls.default.http.map((u) => http(u, { batch: true, timeout: 15_000 }));
+  const connectors: CreateConnectorFn[] = [injected({ shimDisconnect: true })];
+  // Branch on the inlined constant (not the runtime config field) so a build without a project id
+  // statically drops the WalletConnect connector and the ~80 chunks of its modal from the export.
+  if (__WALLETCONNECT_PROJECT_ID__) {
+    connectors.push(walletConnect({
+      projectId: __WALLETCONNECT_PROJECT_ID__,
+      showQrModal: true,
+      metadata: { name: 'CAT WARS', description: 'On-chain 1v1 cat-fight betting game', url: typeof location === 'undefined' ? '' : location.origin, icons: [] },
+    }));
+  }
   return createConfig({
     chains: [cfg.chain],
-    connectors: [injected({ shimDisconnect: true })],
+    connectors,
     multiInjectedProviderDiscovery: true,
     transports: { [cfg.chain.id]: fallback(transports, { rank: false }) },
     pollingInterval: 4_000,
